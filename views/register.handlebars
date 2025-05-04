@@ -1,0 +1,18 @@
+<h2>Register</h2>
+<form method="POST" action="/register">
+    <label>First Name: <input type="text" name="firstName" required></label><br>
+    <label>Last Name: <input type="text" name="lastName" required></label><br>
+    <label>Email: <input type="email" name="email" required></label><br>
+    <label>Password: <input type="password" name="password" required></label><br>
+    <label>Receive Email Notifications:
+        <input type="checkbox" name="emailNotification" checked>
+    </label><br>
+    <label>In-App Notifications:
+        <input type="checkbox" name="inApp">
+    </label><br>
+    <button type="submit">Sign Up</button>
+</form>
+
+{{#if error}}
+<p class="error">{{error}}</p>
+{{/if}}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TaskFlow</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/">TaskFlow</a></h1>
+        {{#if user}}
+            <p>Welcome, {{user.firstName}}!</p>
+        {{/if}}
+    </header>
+
+    {{{body}}}
+
+    <footer>
+        <p>&copy; 2025 TaskFlow</p>
+    </footer>
+</body>
+</html>

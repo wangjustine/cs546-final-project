@@ -1,0 +1,17 @@
+<h2>Login to TaskFlow</h2>
+
+<form method="POST" action="/login">
+    <label for="email">Email:</label><br>
+    <input type="email" name="email" id="email" required><br><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" name="password" id="password" required><br><br>
+
+    <button type="submit">Login</button>
+</form>
+
+<p>Don't have an account? <a href="/register">Register here</a>.</p>
+
+{{#if error}}
+    <p class="error">{{error}}</p>
+{{/if}}
