@@ -1,25 +1,18 @@
 import { Router } from 'express';
-import * as users from '../data/users.js';
+import users from '../data/users.js';
 import bcrypt from 'bcrypt';
 
 const router = Router();
 
 
-// GET: user by ID
+// GET users
 router.get("/", async (req, res) => {
-    try {
-        const user = await users.getUserById(req.params.id);
-        if (!user) {
-            res.redirect('/login');
-        }
-        res.status(200).json(user);
-    } catch (e) {
-        throw e;
-    }
-}
-);
+  if (!req.session.user) return res.redirect('/login');
+  res.redirect(`/users/${req.session.user._id}`);
+});
 
-// GET: user by email
+
+// GET: user by ID
 router.get('/:id', async (req, res) => {
   try {
     const user = await users.getUserById(req.params.id);
@@ -29,6 +22,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+//GET: user by email
 router.get('/email/:email', async (req, res) => {
   try {
     const user = await users.getUserByEmail(req.params.email);
@@ -44,7 +38,7 @@ router.post('/register', async (req, res) => {
     const {firstName, lastName, email, password, category, preference} = req.body;
     if (!firstName || !lastName || !email || !password) throw 'missing fields!';
     
-    const user = await userData.createUser(firstName, lastName, email, password, category, preference);
+    const user = await users.createUser(firstName, lastName, email, password, category, preference);
     req.session.user = {
       _id: user._id,
       email: user.email,
@@ -53,7 +47,7 @@ router.post('/register', async (req, res) => {
     };
     res.status(200).json({ message: 'user registered!', user: req.session.user });
   } catch (e) {
-    res.status(400).json({error: e});
+    res.status(400).json({error: e?.toString?.() || 'Unknown error'});
   }
 });
 
@@ -63,7 +57,7 @@ router.post('/login', async (req, res) => {
     const {email, password} = req.body;
     if (!email || !password) throw 'missing email or password!';
 
-    const user = await userData.getUserByEmail(email);
+    const user = await users.getUserByEmail(email);
     const match = await bcrypt.compare(password, user.hashedPassword);
     if (!match) throw 'invalid email or password!';
 
