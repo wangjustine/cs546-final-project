@@ -10,11 +10,11 @@
     "author": "Hengyou Zhou, Justine Wang, Aidan McNamara",
     "license": "MIT",
     "dependencies": {
-        "bcrypt": "^5.1.0",
+        "bcrypt": "^5.1.1",
         "express": "^4.21.2",
-        "express-handlebars": "8.0.3",
-        "express-session": "^1.17.3",
-        "mongodb": "^5.4.0",
+        "express-handlebars": "^8.0.3",
+        "express-session": "^1.18.1",
+        "mongodb": "^5.9.2",
         "uuid": "^8.3.2"
     }
 }
