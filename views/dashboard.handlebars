@@ -1,0 +1,10 @@
+<h2>Your Boards</h2>
+<ul>
+  {{#each boards}}
+    <li>
+      <a href="/boards/{{this.boardId}}">{{this.title}}</a> - {{this.description}}
+    </li>
+  {{/each}}
+</ul>
+
+<a href="/boards/new">+ Create Board</a>

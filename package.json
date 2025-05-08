@@ -7,7 +7,7 @@
     "scripts": {
         "start": "node app.js"
     },
-    "author": "Hengyou Zhou,Justine Wang, Aiden Mcnamara",
+    "author": "Hengyou Zhou, Justine Wang, Aidan McNamara",
     "license": "MIT",
     "dependencies": {
         "bcrypt": "^5.1.0",

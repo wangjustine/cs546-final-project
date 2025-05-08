@@ -1,0 +1,13 @@
+<h2>{{board.title}}</h2>
+<p>{{board.description}}</p>
+
+<ul>
+  {{#each tasks}}
+    <li>
+      {{this.title}} - {{this.status}} - Due: {{this.deadline}}
+      <a href="/tasks/{{this._id}}">View</a>
+    </li>
+  {{/each}}
+</ul>
+
+<a href="/tasks/new?boardId={{board.boardId}}">+ New Task</a>
