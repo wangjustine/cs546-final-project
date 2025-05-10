@@ -1,4 +1,4 @@
-import e, { Router } from 'express';
+import { Router } from 'express';
 import users from '../data/users.js';
 import bcrypt from 'bcrypt';
 
