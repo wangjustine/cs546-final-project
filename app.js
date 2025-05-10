@@ -20,12 +20,21 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+const hbs = exphbs.create({
+  defaultLayout: 'main',
+  helpers: {
+    eq: (a, b) => a === b
+  }
+});
 
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 app.use(express.static("public"));
 
-
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
 app.use("/", homeRoutes);
 app.use("/users", userRoutes);
 app.use("/tasks", taskRoutes);

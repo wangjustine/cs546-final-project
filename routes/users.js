@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import e, { Router } from 'express';
 import users from '../data/users.js';
 import bcrypt from 'bcrypt';
 
@@ -8,29 +8,34 @@ const router = Router();
 // GET users
 router.get("/", async (req, res) => {
   if (!req.session.user) return res.redirect('/login');
-  res.redirect(`/users/${req.session.user._id}`);
+  res.redirect(`/user/${req.session.user._id}`);
 });
 
 
 // GET: user by ID
-router.get('/:id', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
   try {
+    if (!req.session.user || req.session.user._id !== req.params.id) {
+      return res.status(403).redirect('/login');
+    }
+
     const user = await users.getUserById(req.params.id);
-    res.status(200).json(user);
+    req.session.user = {
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      category: user.category,
+      preference: user.preference
+    };
+    res.redirect(`/user/${user._id}`);
   } catch (e) {
-    res.status(404).json({ error: e });
+    res.status(404).render('error', { error: 'User not found!' });
   }
 });
 
-//GET: user by email
-router.get('/email/:email', async (req, res) => {
-  try {
-    const user = await users.getUserByEmail(req.params.email);
-    res.status(200).json(user);
-  } catch (e) {
-    res.status(404).json({ error: e });
-  }
-});
+
 
 // POST: register user
 router.post('/register', async (req, res) => {
@@ -43,9 +48,12 @@ router.post('/register', async (req, res) => {
       _id: user._id,
       email: user.email,
       firstName: user.firstName,
-      category: user.category
+      lastName: user.lastName,
+      email: user.email,
+      category: user.category,
+      preference: user.preference
     };
-    res.status(200).json({ message: 'user registered!', user: req.session.user });
+    res.render('login', {message: 'registered!'});
   } catch (e) {
     res.status(400).json({error: e?.toString?.() || 'Unknown error'});
   }
@@ -65,9 +73,11 @@ router.post('/login', async (req, res) => {
       _id: user._id,
       email: user.email,
       firstName: user.firstName,
-      category: user.category
+      lastName: user.lastName,
+      category: user.category,
+      preference: user.preference
     };
-    res.status(200).json({message: 'logged in!', user: req.session.user});
+    res.redirect(`/user/${user._id}`);
   } catch (e) {
     res.status(401).json({error: e});
   }
@@ -79,7 +89,7 @@ router.get('/logout', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'could not log out!' });
     }
-    res.redirect('/login');
+    res.render('logout', {message: 'logged out!'});
   });
 });
 

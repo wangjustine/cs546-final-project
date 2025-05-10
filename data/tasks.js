@@ -27,6 +27,17 @@ const createTask = async (boardId, title, description, priority, status, deadlin
   return newTask;
 };
 
+const getTaskById = async (taskId) => {
+  const taskCollection = await tasks();
+  const task = await taskCollection.findOne({ _id: taskId });
+  if (!task) throw 'Task not found';
+  return task;
+};
+const getTasksByBoardId = async (boardId) => {
+  const taskCollection = await tasks();
+  const tasksList = await taskCollection.find({ boardId: boardId }).toArray();
+  return tasksList;
+};
 const updateTaskStatus = async (taskId, newStatus) => {
   const taskCollection = await tasks();
   const updateInfo = await taskCollection.updateOne(
@@ -36,4 +47,4 @@ const updateTaskStatus = async (taskId, newStatus) => {
   if (!updateInfo.modifiedCount) throw 'Could not update task status';
 };
 
-export default { createTask, updateTaskStatus };
+export default { createTask, updateTaskStatus, getTaskById ,getTasksByBoardId};

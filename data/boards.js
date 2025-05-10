@@ -18,7 +18,13 @@ const createBoard = async (title, description, createdBy) => {
 
   return newBoard;
 };
+const isMember = (board, userId) => {
+  return board.members.some(m => m.userId === userId);
+};
 
+const isAdmin = (board, userId) => {
+  return board.members.some(m => m.userId === userId && m.role === 'admin');
+};
 const addMemberToBoard = async (boardId, userId, role) => {
   const boardCollection = await boards();
   const updateInfo = await boardCollection.updateOne(
@@ -27,5 +33,18 @@ const addMemberToBoard = async (boardId, userId, role) => {
   );
   if (!updateInfo.modifiedCount) throw 'Could not add member to board';
 };
+const getBoardById = async (boardId) => {
+  const boardCollection = await boards();
+  const board = await boardCollection.findOne({ boardId: boardId });
+  if (!board) throw 'Board not found';
+  return board;
+};
+const getBoardsByUserId = async (userId) => {
+  const boardCollection = await boards();
+  const allBoards = await boardCollection.find({ "members.userId": userId }).toArray();
+  return allBoards;
+};
 
-export default { createBoard, addMemberToBoard };
+
+
+export default { createBoard, addMemberToBoard, isMember, isAdmin, getBoardsByUserId ,getBoardById };

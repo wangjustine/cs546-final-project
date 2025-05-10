@@ -23,6 +23,12 @@ const createUser = async (firstName, lastName, email, password, category, prefer
 
   return newUser;
 };
+const getUserById = async (id) => {
+  const userCollection = await users();
+  const user = await userCollection.findOne({ _id: id });
+  if (!user) throw 'User not found';
+  return user;
+};
 
 const getUserByEmail = async (email) => {
   const userCollection = await users();
@@ -31,4 +37,4 @@ const getUserByEmail = async (email) => {
   return user;
 };
 
-export default { createUser, getUserByEmail };
+export default { createUser, getUserByEmail, getUserById };

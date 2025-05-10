@@ -3,11 +3,9 @@
 
 <ul>
   {{#each tasks}}
-    <li>
-      {{this.title}} - {{this.status}} - Due: {{this.deadline}}
-      <a href="/tasks/{{this._id}}">View</a>
-    </li>
+    <li>{{this.title}} - {{this.status}} - Due: {{this.deadline}}</li>
   {{/each}}
 </ul>
+
 
 <a href="/tasks/new?boardId={{board.boardId}}">+ New Task</a>

@@ -1,22 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>TaskFlow</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
     <header>
         <h1><a href="/">TaskFlow</a></h1>
         {{#if user}}
-            <p>Welcome, {{user.firstName}}!</p>
+        <p>Welcome, {{user.firstName}}!</p>
         {{/if}}
     </header>
+    {{#if user}}
+    <nav class="top-toolbar">
+        <ul style="list-style: none; display: flex; gap: 20px; padding: 0;">
+            <li><a href="/user/{{user._id}}">User Page</a></li>
+            <li><a href="/boards">Board</a></li>
+            <li><a href="/users/logout">Sign Out</a></li>
+        </ul>
+    </nav>
+    {{/if}}
 
+    </nav>
     {{{body}}}
 
     <footer>
         <p>&copy; 2025 TaskFlow</p>
     </footer>
 </body>
+
 </html>

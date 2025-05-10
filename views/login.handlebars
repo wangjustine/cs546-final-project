@@ -1,6 +1,10 @@
+<body>
 <h2>Login to TaskFlow</h2>
 
-<form method="POST" action="/login">
+{{#if message}}
+    <p class="message">{{message}}</p>
+{{/if}}
+<form method="POST" action="/users/login">
     <label for="email">Email:</label><br>
     <input type="email" name="email" id="email" required><br><br>
 
@@ -15,3 +19,4 @@
 {{#if error}}
     <p class="error">{{error}}</p>
 {{/if}}
+</body>

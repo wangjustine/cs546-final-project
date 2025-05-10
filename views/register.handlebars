@@ -1,5 +1,7 @@
+<body>
 <h2>Register</h2>
 <form method="POST" action="/users/register">
+    
     <label>First Name: <input type="text" name="firstName" required></label><br>
     <label>Last Name: <input type="text" name="lastName" required></label><br>
     <label>Email: <input type="email" name="email" required></label><br>
@@ -10,9 +12,17 @@
     <label>In-App Notifications:
         <input type="checkbox" name="inApp">
     </label><br>
+    <label>Category:
+        <select name="category" required>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+        </select>
+    </label>
     <button type="submit">Sign Up</button>
 </form>
 
+<p>Already have an account? <a href="/login">login here</a>.</p>
 {{#if error}}
 <p class="error">{{error}}</p>
 {{/if}}
+</body>

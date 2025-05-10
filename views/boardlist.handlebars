@@ -1,0 +1,23 @@
+<h2>Your Boards</h2>
+
+<ul>
+  {{#each boards}}
+    <li>
+      <a href="/boards/{{this.boardId}}">{{this.title}}</a>
+      <p>{{this.description}}</p>
+    </li>
+  {{/each}}
+</ul>
+
+{{#if (eq user.category "admin")}}
+    <a href="/boards/create">Create New Board</a>
+    <form action="/boards/create" method="POST">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+        
+        <button type="submit">Submit</button>
+    </form>
+{{/if}}
