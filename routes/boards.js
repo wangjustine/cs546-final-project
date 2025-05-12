@@ -40,14 +40,26 @@ router.post('/:id/add-member', async (req, res) => {
     }
 
     const { userId, role } = req.body;
-    await boards.addMemberToBoard(req.params.id, userId, role);
+    await boards.addMemberToBoard(req.params.id, userId, 'viewer');
+
     res.redirect(`/boards/${req.params.id}`);
   } catch (e) {
     res.status(400).json({ error: e });
   }
 });
 
-// View board with tasks
+
+// Render the create board form (admin only)
+router.get('/new', async (req, res) => {
+  if (!req.session.user || req.session.user.category !== 'admin') {
+    return res.status(403).render('error', { error: 'Only admins can access this page.' });
+  }
+
+  res.render('createBoard', { title: 'Create New Board' });
+});
+
+
+// View board by ID
 router.get('/:id', async (req, res) => {
   try {
     const board = await boards.getBoardById(req.params.id);

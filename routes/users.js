@@ -77,7 +77,12 @@ router.post('/login', async (req, res) => {
       category: user.category,
       preference: user.preference
     };
-    res.redirect(`/user/${user._id}`);
+    if (user.category === 'admin') {
+      return res.redirect('/admin');
+    } else {
+      return res.redirect('/dashboard');
+    }
+
   } catch (e) {
     res.status(401).json({error: e});
   }

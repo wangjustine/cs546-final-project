@@ -18,6 +18,8 @@ const createBoard = async (title, description, createdBy) => {
 
   return newBoard;
 };
+
+
 const isMember = (board, userId) => {
   return board.members.some(m => m.userId === userId);
 };
@@ -35,7 +37,7 @@ const addMemberToBoard = async (boardId, userId, role) => {
 };
 const getBoardById = async (boardId) => {
   const boardCollection = await boards();
-  const board = await boardCollection.findOne({ boardId: boardId });
+  const board = await boardCollection.findOne({boardId});
   if (!board) throw 'Board not found';
   return board;
 };

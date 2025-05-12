@@ -1,0 +1,19 @@
+<h1>Welcome, Admin {{user.firstName}}!</h1>
+
+<p>This is the admin dashboard. From here, you can manage users, boards, and tasks.</p>
+
+<hr>
+
+<h2>Navigation</h2>
+<ul>
+  <li><a href="/boards">View All Boards</a></li>
+  <li><a href="/users/{{user._id}}">View My Profile</a></li>
+  <li><a href="/logout">Logout</a></li>
+</ul>
+
+{{!-- admin-specific options --}}
+<h2>Admin Tools</h2>
+<ul>
+  <li><a href="/admin/users">Manage Users</a> (coming soon)</li>
+  <li><a href="/admin/boards">Manage Boards</a> (coming soon)</li>
+</ul>

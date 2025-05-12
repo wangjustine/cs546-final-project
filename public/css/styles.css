@@ -115,6 +115,40 @@ header h1 a {
   background-color: #0056b3;
 }
 
+
+.add-member {
+  border: 1px solid #ccc;
+  padding: 1em;
+  margin-top: 2em;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  max-width: 400px;
+}
+
+.add-member h3 {
+  margin-top: 0;
+  font-size: 1.2em;
+}
+
+.add-member label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+.add-member input[type="text"] {
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  box-sizing: border-box;
+}
+
+.add-member button {
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+
 form {
   background-color: #ffffff;
   padding: 1em;

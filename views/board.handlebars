@@ -1,11 +1,30 @@
 <h2>{{board.title}}</h2>
 <p>{{board.description}}</p>
 
+<h3>Tasks</h3>
 <ul>
   {{#each tasks}}
     <li>{{this.title}} - {{this.status}} - Due: {{this.deadline}}</li>
   {{/each}}
 </ul>
 
+<p><a href="/tasks/new?boardId={{board.boardId}}">Create New Task</a></p>
 
-<a href="/tasks/new?boardId={{board.boardId}}">+ New Task</a>
+
+<section class="add-member">
+  <h3>Add Member</h3>
+  <form method="POST" action="/boards/{{board.boardId}}/add-member">
+    <label for="userId">User ID</label>
+    <input type="text" id="userId" name="userId" required>
+
+    <button type="submit">Add Member</button>
+  </form>
+</section>
+
+
+<h3>Members</h3>
+<ul>
+  {{#each board.members}}
+    <li>User: {{this.userId}} ({{this.role}})</li>
+  {{/each}}
+</ul>

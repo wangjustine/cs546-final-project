@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import exphbs from "express-handlebars";
+import cookieParser from 'cookie-parser';
 import { dbConnection } from "./config/mongoConnections.js"; 
 import userRoutes from "./routes/users.js";
 import taskRoutes from "./routes/tasks.js";
@@ -8,6 +9,19 @@ import homeRoutes from "./routes/index.js";
 import boardRoutes from "./routes/boards.js"; 
 import commentRoutes from "./routes/comments.js"; 
 import notificationRoutes from "./routes/notifications.js"; 
+
+import {
+  isAuthenticated,
+  isAdmin,
+  redirectIfLoggedIn,
+  requestLogger,
+  pathCounter,
+  oddEvenMarker,
+  punSetter,
+  punLogger,
+  cookieTracker
+} from './middleware.js';
+
 
 const app = express();
 const PORT = 3000;
@@ -20,6 +34,26 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+
+
+
+app.use(cookieParser());
+
+app.use(requestLogger);
+app.use(pathCounter);
+app.use(oddEvenMarker);
+app.use(punSetter);
+app.use(punLogger);
+app.use(cookieTracker);
+//app.use(blockAdmin);          //  block /admin routes globally
+//app.use(modifyPostsMethod);   // mutate method for /posts
+app.use(cookieTracker);
+
+
+
+
+
+
 const hbs = exphbs.create({
   defaultLayout: 'main',
   helpers: {

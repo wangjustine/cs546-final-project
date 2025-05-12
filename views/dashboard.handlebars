@@ -1,10 +1,20 @@
-<h2>Your Boards</h2>
+<h1>Welcome, {{user.firstName}}!</h1>
+
+<p>This is your dashboard. From here you can manage your tasks, check your boards, and collaborate with your team.</p>
+
+<hr>
+
+<h2>Quick Links</h2>
 <ul>
-  {{#each boards}}
-    <li>
-      <a href="/boards/{{this.boardId}}">{{this.title}}</a> - {{this.description}}
-    </li>
-  {{/each}}
+  <li><a href="/boards">My Boards</a></li>
+  <li><a href="/boards/new">Create Board</a></li>
+  <li><a href="/user/{{user._id}}">View Profile</a></li>
+  <li><a href="/logout">Logout</a></li>
 </ul>
 
-<a href="/boards/new">+ Create Board</a>
+<h3>Your Info:</h3>
+<ul>
+  <li>Email: {{user.email}}</li>
+  <li>Category: {{user.category}}</li>
+  <li>Preference: {{user.preference}}</li>
+</ul>
