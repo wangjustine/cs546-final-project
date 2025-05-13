@@ -57,7 +57,7 @@ router.get('/dashboard', isAuthenticated, (req, res) => {
 
 // Admin route
 router.get('/admin', isAdmin, (req, res) => {
-  res.render('adminDashboard', { user: req.session.user });
+  res.render('admin', { user: req.session.user });
 });
 
 
