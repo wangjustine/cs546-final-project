@@ -91,7 +91,7 @@ router.get('/admin/users', async (req, res) => {
     res.render('adminUsers', {users: allUsers});
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
+    res.status(400).render('error', {error: e});
   }
 });
 
@@ -106,7 +106,7 @@ router.post('/admin/users/:userId/role', async (req, res) => {
     res.redirect('/admin/users');
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
+    res.status(400).render('error', {error: e});
   }
 });
 
@@ -120,7 +120,7 @@ router.post('/admin/users/:userId/remove', async (req, res) => {
     res.redirect('/admin/users');
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
+    res.status(400).render('error', {error: e});
   }
 });
 
@@ -136,11 +136,10 @@ router.post('/admin/users/:userId/add-to-board', async (req, res) => {
     res.redirect('/admin/users');
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
-  }
+    res.status(400).render('error', {error: e});
+
+}
 });
-
-
 
 
 export default router;
