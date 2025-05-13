@@ -49,4 +49,5 @@ const getBoardsByUserId = async (userId) => {
 
 
 
-export default { createBoard, addMemberToBoard, isMember, isAdmin, getBoardsByUserId ,getBoardById };
+
+export default {createBoard, addMemberToBoard, isMember, isAdmin, getBoardsByUserId ,getBoardById};

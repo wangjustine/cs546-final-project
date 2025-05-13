@@ -2,6 +2,9 @@ import { Router } from 'express';
 import boards from '../data/boards.js';
 import tasks from '../data/tasks.js'; 
 import users from '../data/users.js'; 
+import { getAllUsers, updateUserRole, deleteUser } from '../data/users.js';
+
+
 
 const router = Router();
 router.get('/', async (req, res) => {
@@ -73,5 +76,69 @@ router.get('/:id', async (req, res) => {
     res.status(404).render('error', { error: e });
   }
 });
+
+
+
+
+
+router.get('/admin/users', async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.category !== 'admin') {
+      return res.status(403).render('error', { error: 'Only admins can access this page.' });
+    }
+
+    const allUsers = await getAllUsers();
+    res.render('adminUsers', { users: allUsers });
+  } catch (e) {
+    console.error(e);
+    res.status(500).render('error', { error: e });
+  }
+});
+
+router.post('/admin/users/:userId/role', async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.category !== 'admin') {
+      return res.status(403).send("Only admins can update user roles");
+    }
+
+    const { category } = req.body;
+    await updateUserRole(req.params.userId, category);
+    res.redirect('/admin/users');
+  } catch (e) {
+    console.error(e);
+    res.status(500).render('error', { error: e });
+  }
+});
+
+router.post('/admin/users/:userId/remove', async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.category !== 'admin') 
+      return res.status(403).send("Only admins can remove users");
+
+    await deleteUser(req.params.userId);
+    res.redirect('/admin/users');
+  } catch (e) {
+    console.error(e);
+    res.status(500).render('error', { error: e });
+  }
+});
+
+router.post('/admin/users/:userId/add-to-board', async (req, res) => {
+  try {
+    if (!req.session.user || req.session.user.category !== 'admin') {
+      return res.status(403).send("Only admins can add users to boards");
+    }
+    const { boardId, role } = req.body;
+    const userId = req.params.userId;
+    await boards.addMemberToBoard(boardId, userId, role);
+    res.redirect('/admin/users');
+  } catch (e) {
+    console.error(e);
+    res.status(500).render('error', { error: e });
+  }
+});
+
+
+
 
 export default router;

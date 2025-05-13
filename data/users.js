@@ -36,5 +36,26 @@ const getUserByEmail = async (email) => {
   if (!user) throw 'User not found';
   return user;
 };
+export const getAllUsers = async () => {
+  const userCollection = await users();
+  return await userCollection.find({}).toArray();
+};
+
+export const updateUserRole = async (userId, newRole) => {
+  const userCollection = await users();
+  const updateInfo = await userCollection.updateOne(
+    {_id: userId},
+    {$set:{category: newRole}}
+  );
+  if (!updateInfo.modifiedCount) 
+    throw 'Failed to update user role';
+};
+
+export const deleteUser = async (userId) => {
+  const userCollection = await users();
+  const deleteInfo = await userCollection.deleteOne({ _id: userId });
+  if (!deleteInfo.deletedCount) 
+    throw 'Failed to delete user';
+};
 
 export default { createUser, getUserByEmail, getUserById };
