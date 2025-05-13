@@ -1,30 +1,39 @@
-<h2>{{board.title}}</h2>
-<p>{{board.description}}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{board.title}} | TaskFlow</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <h2>{{board.title}}</h2>
+  <p>{{board.description}}</p>
 
-<h3>Tasks</h3>
-<ul>
-  {{#each tasks}}
-    <li>{{this.title}} - {{this.status}} - Due: {{this.deadline}}</li>
-  {{/each}}
-</ul>
+  <h3>Tasks</h3>
+  <ul>
+    {{#each tasks}}
+      <li>{{this.title}} - {{this.status}} - Due: {{this.deadline}}</li>
+    {{/each}}
+  </ul>
 
-<p><a href="/tasks/new?boardId={{board.boardId}}">Create New Task</a></p>
+  <p><a href="/tasks/new?boardId={{board.boardId}}">Create New Task</a></p>
 
+  <section class="add-member">
+    <h3>Add Member</h3>
+    <form method="POST" action="/boards/{{board.boardId}}/add-member" id="add-member-form">
+      <label for="userId">User ID</label>
+      <input type="text" id="userId" name="userId" required>
+      <button type="submit">Add Member</button>
+    </form>
+  </section>
 
-<section class="add-member">
-  <h3>Add Member</h3>
-  <form method="POST" action="/boards/{{board.boardId}}/add-member">
-    <label for="userId">User ID</label>
-    <input type="text" id="userId" name="userId" required>
+  <h3>Members</h3>
+  <ul>
+    {{#each board.members}}
+      <li>User: {{this.userId}} ({{this.role}})</li>
+    {{/each}}
+  </ul>
 
-    <button type="submit">Add Member</button>
-  </form>
-</section>
-
-
-<h3>Members</h3>
-<ul>
-  {{#each board.members}}
-    <li>User: {{this.userId}} ({{this.role}})</li>
-  {{/each}}
-</ul>
+  <script src="/js/board.js"></script>
+</body>
+</html>
