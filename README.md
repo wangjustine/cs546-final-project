@@ -11,11 +11,9 @@ Functions to create, edit, delete, mark tasks as complete
 View task: expands with full details 
 Task details include title, description, priority level, and completion status
 Task categories/labeling
-Organize tasks using categories or tags
 Deadline setting:
 Users can set interim due dates for task deadlines
 Overdue tasks will be highlighted for visibility
-Search/sort/filter tasks by labels, priority status, due date
 
 ## Installation
 How to set up the project locally:
