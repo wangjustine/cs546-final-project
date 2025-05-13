@@ -41,7 +41,7 @@ router.get('/user/:id', async (req, res) => {
 // POST: register user
 router.post('/register', async (req, res) => {
   try {
-    const {firstName, lastName, email, password, category, preference} = req.body;
+    let {firstName, lastName, email, password, category, preference} = req.body;
     
     email = email?.toLowerCase().trim();
     firstName = firstName?.trim();
@@ -62,7 +62,7 @@ router.post('/register', async (req, res) => {
     };
     res.render('login', {message: 'registered!'});
   } catch (e) {
-    res.status(400).json({error: e?.toString?.() || 'Unknown error'});
+    res.render('error', { error: e });
   }
 });
 
@@ -91,15 +91,14 @@ router.post('/login', async (req, res) => {
     }
 
   } catch (e) {
-    res.status(401).json({error: e});
-  }
-});
+    res.render('error', { error: e })
+}});
 
 // GET: logout
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.status(500).json({ error: 'could not log out!' });
+    res.render('error', { error: e });
     }
     res.render('logout', {message: 'logged out!'});
   });
