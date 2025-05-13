@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 
 const saltRounds = 10;
 
-const createUser = async (firstName, lastName, email, password, category, preference) => {
+const createUser = async (firstName, lastName, email, password, category) => {
   const userCollection = await users();
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
