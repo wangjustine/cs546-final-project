@@ -42,7 +42,8 @@ router.post('/:id/add-member', async (req, res) => {
       return res.status(403).send("Only admins can add members");
     }
 
-    const {userId, role} = req.body;
+    const {userId} = req.body;
+    if (!isValidObjectId(userId)) throw 'Invalid userId';
     await boards.addMemberToBoard(req.params.id, userId, 'viewer');
 
     res.redirect(`/boards/${req.params.id}`);
