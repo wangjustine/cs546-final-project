@@ -1,14 +1,42 @@
 import { Router } from 'express';
-import * as tasks from '../data/tasks.js';
+import tasks from '../data/tasks.js';
 
 const router = Router();
 
+router.get('/new', async (req, res) => {
+  const boardId = req.query.boardId;
+  if (!boardId) {
+    return res.status(400).render('error', { error: 'Missing boardId' });
+  }
+  res.render('task', { boardId });
+});
 router.post('/', async (req, res) => {
   try {
-    const task = await tasks.createTask(req.body);
-    res.status(200).json(task);
+    const {
+      boardId,
+      title,
+      description,
+      priority,
+      status,
+      deadline,
+      createdBy,
+      assignedTo
+    } = req.body;
+
+    await tasks.createTask(
+      boardId,
+      title,
+      description,
+      priority,
+      status,
+      deadline,
+      createdBy,
+      assignedTo
+    );
+
+    res.redirect(`/boards/${boardId}`);
   } catch (e) {
-    res.status(400).json({ error: e });
+    res.status(400).render('error', { error: e });
   }
 });
 
