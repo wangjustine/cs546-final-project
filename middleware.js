@@ -100,8 +100,8 @@ const modifyPostsMethod = (req, res, next) => {
 };
 
 const cookieTracker = (req, res, next) => {
-  console.log('The request has all the following cookies:');
-  console.log(req.cookies);
+ // console.log('The request has all the following cookies:');
+  //console.log(req.cookies);
   if (req.cookies.lastAccessed) {
     console.log('Last accessed at ' + req.cookies.lastAccessed);
   } else {

@@ -1,16 +1,50 @@
 import { Router } from 'express';
-import * as tasks from '../data/tasks.js';
+import { isAuthenticated } from '../middleware.js';
+
+import tasks from '../data/tasks.js';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
+router.post('/', isAuthenticated, async (req, res) => {
   try {
-    const task = await tasks.createTask(req.body);
-    res.status(200).json(task);
+    const { boardId, title, description, priority, deadline } = req.body;
+    const status = 'open';
+    const createdBy = req.session.user._id;
+    const assignedTo = null;
+
+    console.log('[DEBUG] POST /tasks body:', req.body);
+
+    const newTask = await tasks.createTask(
+      boardId,
+      title,
+      description,
+      priority,
+      status,
+      deadline,
+      createdBy,
+      assignedTo
+    );
+
+    res.redirect(`/boards/${boardId}`);
   } catch (e) {
-    res.status(400).json({ error: e });
+    console.error('[ERROR] Failed to create task:', e);
+    res.status(400).json({ error: e?.toString?.() || 'Unknown error' });
   }
 });
+
+router.get('/new', isAuthenticated, async (req, res) => {
+  try {
+    const boardId = req.query.boardId;
+    if (!boardId) {
+      return res.status(400).render('error', { error: 'Board ID is required to create a task.' });
+    }
+
+    res.render('task', { boardId });
+  } catch (e) {
+    res.status(500).render('error', { error: 'Failed to load task creation page.' });
+  }
+});
+
 
 router.get('/:id', async (req, res) => {
   try {
@@ -38,5 +72,7 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json({ error: e });
   }
 });
+
+
 
 export default router;

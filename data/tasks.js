@@ -35,7 +35,7 @@ const getTaskById = async (taskId) => {
 };
 const getTasksByBoardId = async (boardId) => {
   const taskCollection = await tasks();
-  const tasksList = await taskCollection.find({ boardId: boardId }).toArray();
+  const tasksList = await taskCollection.find({ boardId }).toArray();
   return tasksList;
 };
 const updateTaskStatus = async (taskId, newStatus) => {
