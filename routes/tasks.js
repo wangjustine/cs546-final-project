@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import tasks from '../data/tasks.js';
+import {validateTaskInput} from '../validation.js';
+
 
 const router = Router();
 
@@ -10,6 +12,7 @@ router.get('/new', async (req, res) => {
   }
   res.render('task', { boardId });
 });
+
 router.post('/', async (req, res) => {
   try {
     const {
@@ -22,6 +25,8 @@ router.post('/', async (req, res) => {
       createdBy,
       assignedTo
     } = req.body;
+
+    validateTaskInput({title, description, priority, deadline, status, createdBy, assignedTo});
 
     await tasks.createTask(
       boardId,

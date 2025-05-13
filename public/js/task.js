@@ -56,11 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (taskForm) {
       taskForm.addEventListener('submit', (e) => {
         const title = document.getElementById('task-title').value.trim();
+        const description = document.getElementById('task-description').value.trim();
+        const priority = document.getElementById('task-priority').value.trim().toLowerCase();
         const deadline = document.getElementById('task-deadline').value;
+
+        const validPriorities = ['low', 'medium', 'high'];
+        const isValidDate = !isNaN(Date.parse(deadline));
+
+        let error = null;
+        if (!title) error = 'Title is required.';
+        else if (!description) error = 'Description is required.';
+        else if (!validPriorities.includes(priority)) error = 'Priority must be low, medium, or high.';
+        else if (!isValidDate) error = 'Deadline must be a valid date.';
+
   
-        if (!title || !deadline) {
+        if (error) {
           e.preventDefault();
-          alert('Please fill in both title and deadline.');
+          alert(error);
         }
       });
     }

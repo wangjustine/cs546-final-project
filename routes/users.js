@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import users from '../data/users.js';
+import {validateUserInput} from '../validation.js';
 import bcrypt from 'bcrypt';
 
 const router = Router();
@@ -41,7 +42,13 @@ router.get('/user/:id', async (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const {firstName, lastName, email, password, category, preference} = req.body;
-    if (!firstName || !lastName || !email || !password) throw 'missing fields!';
+    
+    email = email?.toLowerCase().trim();
+    firstName = firstName?.trim();
+    lastName = lastName?.trim();
+    password = password?.trim();
+
+    validateUserInput({ firstName, lastName, email, password })
     
     const user = await users.createUser(firstName, lastName, email, password, category, preference);
     req.session.user = {

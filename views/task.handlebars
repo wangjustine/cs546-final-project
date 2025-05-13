@@ -1,20 +1,24 @@
 <body>
     <h2>Create New Task</h2>
-    <form method="POST" action="/tasks">
+    <form id="new-task-form" method="POST" action="/tasks">
         <input type="hidden" name="boardId" value="{{boardId}}">
-        <label>Title: <input type="text" name="title" required></label><br>
-        <label>Description: <textarea name="description" required></textarea></label><br>
-        <label>Priority:
-            <select name="priority">
+        <label for="task-title">Title: <input type="text" id="task-title" name="title" required></label><br>
+        <label for="task-description">Description: <textarea id="task-description" name="description" required></textarea></label><br>
+        <label for="task-priority">Priority:
+            <select id="task-priority" name="priority" required>
+                <option value="">Select priority</option>
                 <option>low</option>
                 <option>medium</option>
                 <option>high</option>
             </select>
         </label><br>
-        <label>Status: <input type="text" name="status" required></label><br>
-        <label>Deadline: <input type="date" name="deadline" required></label><br>
-        <label>Created By: <input type="text" name="createdBy" required></label><br>
-        <label>Assigned To: <input type="text" name="assignedTo" required></label><br>
+        <label for="task-status">Status: <input type="text" id="task-status" name="status" required></label><br>
+        <label for="task-deadline">Deadline: <input type="date" id="task-deadline" name="deadline" required></label><br>
+        <label for="task-createdBy">Created By: <input type="text" id="task-createdBy" name="createdBy" required></label><br>
+        <label for="task-assignedTo">Assigned To: <input type="text" id="task-assignedTo" name="assignedTo" required></label><br>
         <button type="submit">Create Task</button>
     </form>
+    <p><a href="/boards/{{boardId}}">Back to Board</a></p>
+
+    <script src="/js/task.js"></script>
 </body>
