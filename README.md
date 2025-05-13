@@ -24,3 +24,8 @@ How to set up the project locally:
 git clone https://github.com/wangjustine/cs546-final-project.git
 cd cs546-final-project
 npm install
+npm run seed
+npm start
+```
+
+Then go to localhost:3000 to nagivate through our project.
