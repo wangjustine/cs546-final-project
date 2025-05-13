@@ -8,7 +8,6 @@ import taskRoutes from "./routes/tasks.js";
 import homeRoutes from "./routes/index.js"; 
 import boardRoutes from "./routes/boards.js"; 
 import commentRoutes from "./routes/comments.js"; 
-import notificationRoutes from "./routes/notifications.js"; 
 import adminRoutes from './routes/admin.js';
 
 import {
@@ -75,7 +74,6 @@ app.use("/users", userRoutes);
 app.use("/tasks", taskRoutes);
 app.use("/boards", boardRoutes);
 app.use("/comments", commentRoutes);
-app.use("/notifications", notificationRoutes);
 app.use('/admin', adminRoutes);
 
 

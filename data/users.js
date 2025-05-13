@@ -15,7 +15,6 @@ const createUser = async (firstName, lastName, email, password, category, prefer
     email,
     hashedPassword,
     category,
-    preference
   };
 
   const insertInfo = await userCollection.insertOne(newUser);

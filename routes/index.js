@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import boardsRouter from './boards.js';
 import commentsRouter from './comments.js';
-import notificationsRouter from './notifications.js';
 import tasksRouter from './tasks.js';
 import usersRouter from './users.js';
 import users from '../data/users.js'
@@ -64,7 +63,6 @@ router.get('/admin', isAdmin, (req, res) => {
 
 router.use('/boards', boardsRouter);
 router.use('/comments', commentsRouter);
-router.use('/notifications', notificationsRouter);
 router.use('/tasks', tasksRouter);
 router.use('/users', usersRouter);
 
