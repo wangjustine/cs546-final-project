@@ -6,7 +6,7 @@ import usersRouter from './users.js';
 import users from '../data/users.js'
 import {isAuthenticated, isAdmin, redirectIfLoggedIn} from '../middleware.js';
 
-const router = Router();
+let router = Router();
 
 //public routes
 router.get('/', (req, res) => {
@@ -32,7 +32,7 @@ router.get('/user/:id', isAuthenticated, async (req, res) => {
       return res.status(403).render('error', { error: '403 Forbidden' });
     }
 
-    const user = await users.getUserById(req.params.id);
+    let user = await users.getUserById(req.params.id);
     res.render('users', {
       firstName: user.firstName,
       lastName: user.lastName,

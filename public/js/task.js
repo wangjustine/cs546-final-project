@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const completeButtons = document.querySelectorAll('.complete-task-btn');
+    let completeButtons = document.querySelectorAll('.complete-task-btn');
     completeButtons.forEach((button) => {
       button.addEventListener('click', async () => {
-        const taskId = button.dataset.taskId;
+        let taskId = button.dataset.taskId;
   
         try {
-          const res = await fetch(`/tasks/${taskId}/status`, {
+          let res = await fetch(`/tasks/${taskId}/status`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
@@ -25,17 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   
-    const taskTitles = document.querySelectorAll('.task-title');
-    const modal = document.getElementById('taskModal');
-    const closeModal = document.getElementById('closeModal');
+    let taskTitles = document.querySelectorAll('.task-title');
+    let modal = document.getElementById('taskModal');
+    let closeModal = document.getElementById('closeModal');
   
     taskTitles.forEach((title) => {
       title.addEventListener('click', async () => {
-        const taskId = title.dataset.taskId;
+        let taskId = title.dataset.taskId;
         try {
-          const res = await fetch(`/tasks/${taskId}`);
+          let res = await fetch(`/tasks/${taskId}`);
           if (!res.ok) throw new Error('Task fetch failed');
-          const task = await res.json();
+          let task = await res.json();
           document.getElementById('modal-title').textContent = task.title;
           document.getElementById('modal-description').textContent = task.description;
           document.getElementById('modal-priority').textContent = `Priority: ${task.priority}`;
@@ -52,16 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('visible');
       });
     }
-    const taskForm = document.getElementById('new-task-form');
+    let taskForm = document.getElementById('new-task-form');
     if (taskForm) {
       taskForm.addEventListener('submit', (e) => {
-        const title = document.getElementById('task-title').value.trim();
-        const description = document.getElementById('task-description').value.trim();
-        const priority = document.getElementById('task-priority').value.trim().toLowerCase();
-        const deadline = document.getElementById('task-deadline').value;
+        let title = document.getElementById('task-title').value.trim();
+        let description = document.getElementById('task-description').value.trim();
+        let priority = document.getElementById('task-priority').value.trim().toLowerCase();
+        let deadline = document.getElementById('task-deadline').value;
 
-        const validPriorities = ['low', 'medium', 'high'];
-        const isValidDate = !isNaN(Date.parse(deadline));
+        let validPriorities = ['low', 'medium', 'high'];
+        let isValidDate = !isNaN(Date.parse(deadline));
 
         let error = null;
         if (!title) error = 'Title is required.';

@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const loginForm = document.getElementById('login-form');
+  let loginForm = document.getElementById('login-form');
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
+      let email = document.getElementById('login-email').value.trim();
+      let password = document.getElementById('login-password').value;
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!email || !emailRegex.test(email)) {
         e.preventDefault();
