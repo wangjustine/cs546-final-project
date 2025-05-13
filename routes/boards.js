@@ -123,6 +123,9 @@ router.post('/admin/users/:userId/remove', async (req, res) => {
       return res.status(403).send("Only admins can add users to boards");
     if (req.session.user.category !== 'admin') 
       return res.status(403).send("Only admins can add users to boards");
+
+    if (!isValidObjectId(req.params.userId)) throw 'Invalid userId';
+
     await deleteUser(req.params.userId);
     res.redirect('/admin/users');
   } catch (e) {
@@ -140,8 +143,9 @@ router.post('/admin/users/:userId/add-to-board', async (req, res) => {
     let {boardId, role} = req.body;
     let userId = req.params.userId;
     if (!isValidObjectId(userId)) throw 'Invalid userId';
-    if (!isNonEmptyString(boardId)) throw 'Invalid boardId';
-    if (!['admin', 'viewer'].includes(role)) throw 'Invalid role';
+    if (!isValidObjectId(boardId)) throw 'Invalid boardId';
+    if (!isNonEmptyString(role)) throw 'Invalid role';
+
     await boards.addMemberToBoard(boardId, userId, role);
     res.redirect('/admin/users');
   } catch (e) {
