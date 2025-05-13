@@ -48,7 +48,6 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
     let task = await tasks.getTaskById(req.params.id);
     res.status(200).json(task);
   } catch (e) {
@@ -58,7 +57,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/update/:id', async (req, res) => {
   try {
-    if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
     let task = await tasks.getTaskById(req.params.id);
     let boardId = task.boardId;
     let board = await boards.getBoardById(boardId);
@@ -72,7 +70,6 @@ router.post('/update/:id', async (req, res) => {
 
 router.post('/delete/:id', async (req, res) => {
   try {
-    if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
     let task = await tasks.getTaskById(req.params.id);
     let boardId = task.boardId;
     let board = await boards.getBoardById(boardId);
