@@ -5,6 +5,7 @@
     "main": "app.js",
     "type": "module",
     "scripts": {
+        "seed": " node seed.js",
         "start": "node app.js"
     },
     "author": "Hengyou Zhou, Justine Wang, Aidan McNamara",
