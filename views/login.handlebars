@@ -4,12 +4,12 @@
 {{#if message}}
     <p class="message">{{message}}</p>
 {{/if}}
-<form method="POST" action="/users/login">
-    <label for="email">Email:</label><br>
-    <input type="email" name="email" id="email" required><br><br>
+<form id="login-form" method="POST" action="/users/login">
+    <label for="login-email">Email:</label><br>
+    <input type="email" name="email" id="login-email" required><br><br>
 
-    <label for="password">Password:</label><br>
-    <input type="password" name="password" id="password" required><br><br>
+    <label for="login-password">Password:</label><br>
+    <input type="password" name="password" id="login-password" required><br><br>
 
     <button type="submit">Login</button>
 </form>
@@ -19,4 +19,7 @@
 {{#if error}}
     <p class="error">{{error}}</p>
 {{/if}}
+
+<script src="/js/login.js"></script>
+
 </body>

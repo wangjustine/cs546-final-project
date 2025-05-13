@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import users from '../data/users.js';
-import {validateUserInput} from '../validation.js';
+import {validateUserInput, isNonEmptyString, isValidEmail, isValidObjectId} from '../validation.js';
 import bcrypt from 'bcrypt';
 
 const router = Router();
@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
 // GET: user by ID
 router.get('/user/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) throw 'Invalid user ID';
     if (!req.session.user || req.session.user._id !== req.params.id) {
       return res.status(403).redirect('/login');
     }
@@ -70,7 +71,11 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const {email, password} = req.body;
-    if (!email || !password) throw 'missing email or password!';
+    email = email?.toLowerCase().trim();
+    password = password?.trim();
+
+    if (!isValidEmail(email)) throw 'Invalid email format!';
+    if (!isNonEmptyString(password)) throw 'Password is required!';
 
     const user = await users.getUserByEmail(email);
     const match = await bcrypt.compare(password, user.hashedPassword);

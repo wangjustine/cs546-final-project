@@ -2,6 +2,8 @@ import {Router} from 'express';
 import boards from '../data/boards.js';
 import tasks from '../data/tasks.js'; 
 import users from '../data/users.js'; 
+import {isValidObjectId, isNonEmptyString} from '../validation.js';
+
 import {getAllUsers, updateUserRole, deleteUser} from '../data/users.js';
 
 
@@ -22,8 +24,12 @@ router.post('/create', async (req, res) => {
     if (!req.session.user || req.session.user.category !== 'admin') {
       return res.status(403).send("Only admin users can create boards");
     }
-
+    
     const {title, description} = req.body;
+
+    if (!isNonEmptyString(title)) throw 'Invalid title';
+    if (!isNonEmptyString(description)) throw 'Invalid description';
+
     const board = await boards.createBoard(title, description, req.session.user._id);
 
     await boards.addMemberToBoard(board.boardId, req.session.user._id, 'admin');
@@ -42,7 +48,8 @@ router.post('/:id/add-member', async (req, res) => {
       return res.status(403).send("Only admins can add members");
     }
 
-    const {userId, role} = req.body;
+    const {userId} = req.body;
+    if (!isValidObjectId(userId)) throw 'Invalid userId';
     await boards.addMemberToBoard(req.params.id, userId, 'viewer');
 
     res.redirect(`/boards/${req.params.id}`);
@@ -91,7 +98,7 @@ router.get('/admin/users', async (req, res) => {
     res.render('adminUsers', {users: allUsers});
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
+    res.status(400).render('error', {error: e});
   }
 });
 
@@ -106,7 +113,7 @@ router.post('/admin/users/:userId/role', async (req, res) => {
     res.redirect('/admin/users');
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
+    res.status(400).render('error', {error: e});
   }
 });
 
@@ -120,7 +127,7 @@ router.post('/admin/users/:userId/remove', async (req, res) => {
     res.redirect('/admin/users');
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
+    res.status(400).render('error', {error: e});
   }
 });
 
@@ -132,15 +139,17 @@ router.post('/admin/users/:userId/add-to-board', async (req, res) => {
       return res.status(403).send("Only admins can add users to boards");
     const {boardId, role} = req.body;
     const userId = req.params.userId;
+    if (!isValidObjectId(userId)) throw 'Invalid userId';
+    if (!isNonEmptyString(boardId)) throw 'Invalid boardId';
+    if (!['admin', 'viewer'].includes(role)) throw 'Invalid role';
     await boards.addMemberToBoard(boardId, userId, role);
     res.redirect('/admin/users');
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', {error: e});
-  }
+    res.status(400).render('error', {error: e});
+
+}
 });
-
-
 
 
 export default router;
