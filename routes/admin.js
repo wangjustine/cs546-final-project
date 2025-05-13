@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as users from '../data/users.js';
 
-const router = Router();
+let router = Router();
 
 router.get('/users', async (req, res) => {
   try {
@@ -9,7 +9,7 @@ router.get('/users', async (req, res) => {
       return res.status(403).send("Only admins can add users to boards");
     if (req.session.user.category !== 'admin') 
       return res.status(403).send("Only admins can add users to boards");
-    const allUsers = await users.getAllUsers();
+    let allUsers = await users.getAllUsers();
     res.render('adminUsers', { users: allUsers });
   } catch (e) {
     console.error(e);

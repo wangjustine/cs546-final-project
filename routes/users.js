@@ -3,7 +3,7 @@ import users from '../data/users.js';
 import {validateUserInput, isNonEmptyString, isValidEmail, isValidObjectId} from '../validation.js';
 import bcrypt from 'bcrypt';
 
-const router = Router();
+let router = Router();
 
 
 // GET users
@@ -21,7 +21,7 @@ router.get('/user/:id', async (req, res) => {
       return res.status(403).redirect('/login');
     }
 
-    const user = await users.getUserById(req.params.id);
+    let user = await users.getUserById(req.params.id);
     req.session.user = {
       _id: user._id,
       email: user.email,
@@ -51,7 +51,7 @@ router.post('/register', async (req, res) => {
 
     validateUserInput({ firstName, lastName, email, password })
     
-    const user = await users.createUser(firstName, lastName, email, password, category, preference);
+    let user = await users.createUser(firstName, lastName, email, password, category, preference);
     req.session.user = {
       _id: user._id,
       email: user.email,
@@ -70,15 +70,15 @@ router.post('/register', async (req, res) => {
 // POST: login
 router.post('/login', async (req, res) => {
   try {
-    const {email, password} = req.body;
+    let {email, password} = req.body;
     email = email?.toLowerCase().trim();
     password = password?.trim();
 
     if (!isValidEmail(email)) throw 'Invalid email format!';
     if (!isNonEmptyString(password)) throw 'Password is required!';
 
-    const user = await users.getUserByEmail(email);
-    const match = await bcrypt.compare(password, user.hashedPassword);
+    let user = await users.getUserByEmail(email);
+    let match = await bcrypt.compare(password, user.hashedPassword);
     if (!match) throw 'invalid email or password!';
 
     req.session.user = {

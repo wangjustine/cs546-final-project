@@ -4,10 +4,10 @@ import boards from '../data/boards.js';
 import {validateTaskInput, isValidObjectId} from '../validation.js';
 
 
-const router = Router();
+let router = Router();
 
 router.get('/new', async (req, res) => {
-  const boardId = req.query.boardId;
+  let boardId = req.query.boardId;
   if (!boardId) {
     return res.status(400).render('error', { error: 'Missing boardId' });
   }
@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
-    const task = await tasks.getTaskById(req.params.id);
+    let task = await tasks.getTaskById(req.params.id);
     res.status(200).json(task);
   } catch (e) {
     res.status(400).render('error', { error: e });
@@ -59,11 +59,11 @@ router.get('/:id', async (req, res) => {
 router.post('/update/:id', async (req, res) => {
   try {
     if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
-    const task = await tasks.getTaskById(req.params.id);
-    const boardId = task.boardId;
-    const board = await boards.getBoardById(boardId);
+    let task = await tasks.getTaskById(req.params.id);
+    let boardId = task.boardId;
+    let board = await boards.getBoardById(boardId);
     await tasks.updateTaskStatus(task._id, req.body.status);
-    const boardTasks = await tasks.getTasksByBoardId(boardId);
+    let boardTasks = await tasks.getTasksByBoardId(boardId);
     res.render('board', { board, tasks: boardTasks , message: 'Task status updated!'});
   } catch (e) {
     res.status(400).render('error', { error: e });
@@ -73,13 +73,13 @@ router.post('/update/:id', async (req, res) => {
 router.post('/delete/:id', async (req, res) => {
   try {
     if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
-    const task = await tasks.getTaskById(req.params.id);
-    const boardId = task.boardId;
-    const board = await boards.getBoardById(boardId);
+    let task = await tasks.getTaskById(req.params.id);
+    let boardId = task.boardId;
+    let board = await boards.getBoardById(boardId);
     await tasks.deleteTask(req.params.id);
-    const boardTasks = await tasks.getTasksByBoardId(boardId);
+    let boardTasks = await tasks.getTasksByBoardId(boardId);
     res.render('board', { board, tasks: boardTasks , message: 'Task deleted!' });
-    const deleted = await tasks.deleteTask(req.params.id);
+    let deleted = await tasks.deleteTask(req.params.id);
     res.status(200).json(deleted);
   } catch (e) {
     res.status(400).render('error', { error: e });

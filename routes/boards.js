@@ -8,11 +8,11 @@ import {getAllUsers, updateUserRole, deleteUser} from '../data/users.js';
 
 
 
-const router = Router();
+let router = Router();
 router.get('/', async (req, res) => {
   try {
     if (!req.session.user) return res.redirect('/login');
-    const userBoards = await boards.getBoardsByUserId(req.session.user._id);
+    let userBoards = await boards.getBoardsByUserId(req.session.user._id);
     res.render('boardlist', {boards: userBoards});
   } catch (e) {
     res.status(400).json({error: e});
@@ -25,12 +25,12 @@ router.post('/create', async (req, res) => {
       return res.status(403).send("Only admin users can create boards");
     }
     
-    const {title, description} = req.body;
+    let {title, description} = req.body;
 
     if (!isNonEmptyString(title)) throw 'Invalid title';
     if (!isNonEmptyString(description)) throw 'Invalid description';
 
-    const board = await boards.createBoard(title, description, req.session.user._id);
+    let board = await boards.createBoard(title, description, req.session.user._id);
 
     await boards.addMemberToBoard(board.boardId, req.session.user._id, 'admin');
 
@@ -43,12 +43,12 @@ router.post('/create', async (req, res) => {
 // Add member (admin only)
 router.post('/:id/add-member', async (req, res) => {
   try {
-    const board = await boards.getBoardById(req.params.id);
+    let board = await boards.getBoardById(req.params.id);
     if (!boards.isAdmin(board, req.session.user._id)) {
       return res.status(403).send("Only admins can add members");
     }
 
-    const {userId} = req.body;
+    let {userId} = req.body;
     if (!isValidObjectId(userId)) throw 'Invalid userId';
     await boards.addMemberToBoard(req.params.id, userId, 'viewer');
 
@@ -72,12 +72,12 @@ router.get('/new', async (req, res) => {
 // View board by ID
 router.get('/:id', async (req, res) => {
   try {
-    const board = await boards.getBoardById(req.params.id);
+    let board = await boards.getBoardById(req.params.id);
     if (!req.session.user || !boards.isMember(board, req.session.user._id)) {
       return res.status(403).send("Access denied");
     }
 
-    const boardTasks = await tasks.getTasksByBoardId(board.boardId); // assumed function
+    let boardTasks = await tasks.getTasksByBoardId(board.boardId); // assumed function
     res.render('board', {board, tasks: boardTasks});
   } catch (e) {
     res.status(404).render('error', {error: e});
@@ -94,7 +94,7 @@ router.get('/admin/users', async (req, res) => {
       return res.status(403).send("Only admins can add users to boards");
     if (req.session.user.category !== 'admin') 
       return res.status(403).send("Only admins can add users to boards");
-    const allUsers = await getAllUsers();
+    let allUsers = await getAllUsers();
     res.render('adminUsers', {users: allUsers});
   } catch (e) {
     console.error(e);
@@ -108,7 +108,7 @@ router.post('/admin/users/:userId/role', async (req, res) => {
       return res.status(403).send("Only admins can add users to boards");
     if (req.session.user.category !== 'admin') 
       return res.status(403).send("Only admins can add users to boards");
-    const {category} = req.body;
+    let {category} = req.body;
     await updateUserRole(req.params.userId, category);
     res.redirect('/admin/users');
   } catch (e) {
@@ -137,8 +137,8 @@ router.post('/admin/users/:userId/add-to-board', async (req, res) => {
       return res.status(403).send("Only admins can add users to boards");
     if (req.session.user.category !== 'admin') 
       return res.status(403).send("Only admins can add users to boards");
-    const {boardId, role} = req.body;
-    const userId = req.params.userId;
+    let {boardId, role} = req.body;
+    let userId = req.params.userId;
     if (!isValidObjectId(userId)) throw 'Invalid userId';
     if (!isNonEmptyString(boardId)) throw 'Invalid boardId';
     if (!['admin', 'viewer'].includes(role)) throw 'Invalid role';
