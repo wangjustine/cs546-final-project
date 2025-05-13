@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import tasks from '../data/tasks.js';
-import {validateTaskInput} from '../validation.js';
+import {validateTaskInput, isValidObjectId} from '../validation.js';
 
 
 const router = Router();
@@ -10,7 +10,7 @@ router.get('/new', async (req, res) => {
   if (!boardId) {
     return res.status(400).render('error', { error: 'Missing boardId' });
   }
-  res.render('task', { boardId });
+  res.render('task', {boardId});
 });
 
 router.post('/', async (req, res) => {
@@ -47,6 +47,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
     const task = await tasks.getTaskById(req.params.id);
     res.status(200).json(task);
   } catch (e) {
@@ -56,6 +57,7 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
+     if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
     const updated = await tasks.updateTask(req.params.id, req.body);
     res.status(200).json(updated);
   } catch (e) {
@@ -65,6 +67,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
     const deleted = await tasks.deleteTask(req.params.id);
     res.status(200).json(deleted);
   } catch (e) {
