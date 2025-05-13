@@ -45,8 +45,8 @@ const requestLogger = (req, res, next) => {
   totalRequests++;
   const timestamp = new Date().toUTCString();
   const auth = req.session.user && req.session.user.category
-  ? `Authenticated ${req.session.user.category.toUpperCase()}`
-  : 'Non-Authenticated';
+    ? `Authenticated ${req.session.user.category.toUpperCase()}`
+    : 'Non-Authenticated';
 
   console.log(`[${timestamp}]: ${req.method} ${req.path} (${auth})`);
   next();
