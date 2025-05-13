@@ -5,8 +5,10 @@ const router = Router();
 
 router.get('/users', async (req, res) => {
   try {
-    if (!req.session.user || req.session.user.category !== 'admin') 
-      return res.status(403).render('error', { error: 'Only admins can access this page.' });
+   if (!req.session.user) 
+      return res.status(403).send("Only admins can add users to boards");
+    if (req.session.user.category !== 'admin') 
+      return res.status(403).send("Only admins can add users to boards");
     const allUsers = await users.getAllUsers();
     res.render('adminUsers', { users: allUsers });
   } catch (e) {
