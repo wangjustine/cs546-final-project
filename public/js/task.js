@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
           });
   
           if (res.ok) {
-            button.textContent = '✓ Completed';
+            button.textContent = 'Completed.';
             button.disabled = true;
           } else {
             alert('Failed to update task status.');
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   
+    // Show modal on task title click
     let taskTitles = document.querySelectorAll('.task-title');
     let modal = document.getElementById('taskModal');
     let closeModal = document.getElementById('closeModal');
@@ -52,27 +53,58 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('visible');
       });
     }
+
+    // AJAX form for new task
     let taskForm = document.getElementById('new-task-form');
     if (taskForm) {
-      taskForm.addEventListener('submit', (e) => {
+      taskForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // prevent full page reload
+
         let title = document.getElementById('task-title').value.trim();
         let description = document.getElementById('task-description').value.trim();
         let priority = document.getElementById('task-priority').value.trim().toLowerCase();
         let deadline = document.getElementById('task-deadline').value;
+        let status = document.getElementById('task-status').value.trim();
+        let createdBy = document.getElementById('task-createdBy').value.trim();
+        let assignedTo = document.getElementById('task-assignedTo').value.trim();
+        let boardId = document.getElementById('boardId').value;
 
         let validPriorities = ['low', 'medium', 'high'];
         let isValidDate = !isNaN(Date.parse(deadline));
-
         let error = null;
-        if (!title) error = 'Title is required.';
-        else if (!description) error = 'Description is required.';
-        else if (!validPriorities.includes(priority)) error = 'Priority must be low, medium, or high.';
-        else if (!isValidDate) error = 'Deadline must be a valid date.';
 
-  
+        if (!title || !description || !priority || !deadline || !status || !createdBy || !assignedTo) {
+          error = 'All fields are required.';
+        } else if (!validPriorities.includes(priority)) {
+          error = 'Priority must be low, medium, or high.';
+        } else if (!isValidDate) {
+          error = 'Deadline must be a valid date.';
+        }
+
         if (error) {
-          e.preventDefault();
           alert(error);
+          return;
+        }
+
+        try {
+          let res = await fetch('/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              boardId, title, description, priority, status, deadline, createdBy, assignedTo
+            })
+          });
+
+          if (res.ok) {
+            alert('Task created successfully!');
+            taskForm.reset();
+          } else {
+            const err = await res.json();
+            alert(`Failed to create task: ${err.error}`);
+          }
+        } catch (err) {
+          console.error('AJAX task creation failed:', err);
+          alert('Something went wrong while submitting the task.');
         }
       });
     }
