@@ -47,4 +47,11 @@ const updateTaskStatus = async (taskId, newStatus) => {
   if (!updateInfo.modifiedCount) throw 'Could not update task status';
 };
 
-export default { createTask, updateTaskStatus, getTaskById ,getTasksByBoardId};
+const deleteTask = async (taskId) => {
+  const taskCollection = await tasks();
+  const deleteInfo = await taskCollection.deleteOne({ _id: taskId });
+  if (!deleteInfo.deletedCount) throw 'Could not delete task';
+  return { deleted: true };
+};
+
+export default { createTask, updateTaskStatus, getTaskById ,getTasksByBoardId,deleteTask};

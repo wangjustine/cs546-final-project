@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import tasks from '../data/tasks.js';
+import boards from '../data/boards.js';
 import {validateTaskInput, isValidObjectId} from '../validation.js';
 
 
@@ -15,7 +16,7 @@ router.get('/new', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const {
+    let {
       boardId,
       title,
       description,
@@ -26,7 +27,7 @@ router.post('/', async (req, res) => {
       assignedTo
     } = req.body;
 
-    validateTaskInput({title, description, priority, deadline, status, createdBy, assignedTo});
+    //validateTaskInput({title, description, priority, deadline, status, createdBy, assignedTo});
 
     await tasks.createTask(
       boardId,
@@ -51,28 +52,39 @@ router.get('/:id', async (req, res) => {
     const task = await tasks.getTaskById(req.params.id);
     res.status(200).json(task);
   } catch (e) {
-    res.status(404).json({ error: e });
+    res.status(400).render('error', { error: e });
   }
 });
 
-router.put('/:id', async (req, res) => {
-  try {
-     if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
-    const updated = await tasks.updateTask(req.params.id, req.body);
-    res.status(200).json(updated);
-  } catch (e) {
-    res.status(400).json({ error: e });
-  }
-});
-
-router.delete('/:id', async (req, res) => {
+router.post('/update/:id', async (req, res) => {
   try {
     if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
+    const task = await tasks.getTaskById(req.params.id);
+    const boardId = task.boardId;
+    const board = await boards.getBoardById(boardId);
+    await tasks.updateTaskStatus(task._id, req.body.status);
+    const boardTasks = await tasks.getTasksByBoardId(boardId);
+    res.render('board', { board, tasks: boardTasks , message: 'Task status updated!'});
+  } catch (e) {
+    res.status(400).render('error', { error: e });
+  }
+});
+
+router.post('/delete/:id', async (req, res) => {
+  try {
+    if (!isValidObjectId(req.params.id)) throw 'Invalid task ID';
+    const task = await tasks.getTaskById(req.params.id);
+    const boardId = task.boardId;
+    const board = await boards.getBoardById(boardId);
+    await tasks.deleteTask(req.params.id);
+    const boardTasks = await tasks.getTasksByBoardId(boardId);
+    res.render('board', { board, tasks: boardTasks , message: 'Task deleted!' });
     const deleted = await tasks.deleteTask(req.params.id);
     res.status(200).json(deleted);
   } catch (e) {
-    res.status(400).json({ error: e });
+    res.status(400).render('error', { error: e });
   }
 });
+
 
 export default router;
