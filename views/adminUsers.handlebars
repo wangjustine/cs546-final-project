@@ -19,20 +19,6 @@
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           <button type="submit" class="remove-btn" onclick="return confirm('Are you sure you want to remove this user?')">Remove</button>
         </form>
-        <form class="add-to-board-form" data-user-id="{{this._id}}">
-          <input type="hidden" name="_csrf" value="{{csrfToken}}">
-          <select name="boardId" required>
-            {{#each boards}}
-              <option value="{{this.boardId}}">{{this.title}}</option>
-            {{/each}}
-          </select>
-          <select name="role" required>
-            <option value="viewer">Viewer</option>
-            <option value="editor">Editor</option>
-            <option value="admin">Admin</option>
-          </select>
-          <button type="submit" class="add-to-board-btn">Add to Board</button>
-        </form>
       </div>
     </li>
   {{/each}}
