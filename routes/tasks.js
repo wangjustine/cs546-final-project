@@ -102,9 +102,8 @@ router.post('/delete/:id', async (req, res) => {
     let userid = req.session.user._id;
     res.render('board', { board, userid: userid, tasks: boardTasks, message: 'Task deleted!' });
     let deleted = await tasks.deleteTask(req.params.id);
-    res.status(200).json(deleted);
   } catch (e) {
-    res.status(400).json({ error: e?.toString?.() || 'Failed to delete task' });
+    res.status(400).render('error', { error: e });
   }
 });
 
