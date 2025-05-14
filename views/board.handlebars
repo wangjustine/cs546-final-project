@@ -40,6 +40,7 @@
 
 <p><a href="/tasks/new?boardId={{board.boardId}}">Create New Task</a></p>
 
+{{#if (eq user.category "admin")}}
 <section class="add-member">
   <h3>Add Member</h3>
   <form method="POST" action="/boards/{{board.boardId}}/add-member" id="add-member-form">
@@ -48,7 +49,7 @@
     <button type="submit">Add Member</button>
   </form>
 </section>
-
+{{/if}}
 <h3>Members</h3>
 <ul>
   {{#each board.members}}
