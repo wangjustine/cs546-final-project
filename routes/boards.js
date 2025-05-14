@@ -2,7 +2,7 @@ import {Router} from 'express';
 import boards from '../data/boards.js';
 import tasks from '../data/tasks.js'; 
 import users from '../data/users.js'; 
-import {isValidObjectId, isNonEmptyString} from '../validation.js';
+import {isValidUUId, isNonEmptyString} from '../validation.js';
 
 import {getAllUsers, updateUserRole, deleteUser} from '../data/users.js';
 
@@ -48,7 +48,7 @@ router.post('/:id/add-member', async (req, res) => {
     }
 
     let {userId} = req.body;
-    if (!isValidObjectId(userId)) throw 'Invalid userId';
+    if (!isValidUUId(userId)) throw 'Invalid userId';
     await boards.addMemberToBoard(req.params.id, userId, 'viewer');
 
     res.redirect(`/boards/${req.params.id}`);
@@ -123,7 +123,7 @@ router.post('/admin/users/:userId/remove', async (req, res) => {
     if (req.session.user.category !== 'admin') 
       return res.status(403).send("Only admins can add users to boards");
 
-    if (!isValidObjectId(req.params.userId)) throw 'Invalid userId';
+    if (!isValidUUId(req.params.userId)) throw 'Invalid userId';
 
     await deleteUser(req.params.userId);
     res.redirect('/admin/users');
@@ -141,8 +141,8 @@ router.post('/admin/users/:userId/add-to-board', async (req, res) => {
       return res.status(403).send("Only admins can add users to boards");
     let {boardId, role} = req.body;
     let userId = req.params.userId;
-    if (!isValidObjectId(userId)) throw 'Invalid userId';
-    if (!isValidObjectId(boardId)) throw 'Invalid boardId';
+    if (!isValidUUId(userId)) throw 'Invalid userId';
+    if (!isValidUUId(boardId)) throw 'Invalid boardId';
     if (!isNonEmptyString(role)) throw 'Invalid role';
 
     await boards.addMemberToBoard(boardId, userId, role);
