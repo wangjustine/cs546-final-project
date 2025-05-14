@@ -1,5 +1,4 @@
 import { boards } from '../config/mongoCollections.js';
-import { v4 as uuid } from 'uuid';
 
 const createBoard = async (title, description, createdBy) => {
   const boardCollection = await boards();
@@ -10,7 +9,8 @@ const createBoard = async (title, description, createdBy) => {
     description,
     createdAt: new Date(),
     createdBy,
-    members: []
+    members: [],
+    comments: [] 
   };
 
   const insertInfo = await boardCollection.insertOne(newBoard);
@@ -47,7 +47,27 @@ const getBoardsByUserId = async (userId) => {
   return allBoards;
 };
 
+const getBoardByIdWithComments = async (boardId) => {
+  if (!boardId) 
+    throw 'You must provide a boardId to search for';
+  if (typeof boardId !== 'string') 
+    throw 'boardId must be a string';
+  const boardCollection = await boards();
+  try {
+    const board = await boardCollection.findOne({ boardId: boardId });
+    if (!board) 
+      throw 'Board not found';
+    return board;
+  } catch (error) {
+    throw `Could not get board with id: ${boardId}. ${error}`;
+  }
+};
 
-
-
-export default {createBoard, addMemberToBoard, isMember, isAdmin, getBoardsByUserId ,getBoardById};
+export default {
+  createBoard,
+  addMemberToBoard,
+  isMember,
+  isAdmin,
+  getBoardsByUserId,
+  getBoardById,
+  getBoardByIdWithComments };

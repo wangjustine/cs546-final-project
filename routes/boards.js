@@ -7,7 +7,6 @@ import {isValidObjectId, isNonEmptyString} from '../validation.js';
 import {getAllUsers, updateUserRole, deleteUser} from '../data/users.js';
 
 
-
 let router = Router();
 router.get('/', async (req, res) => {
   try {
@@ -43,7 +42,7 @@ router.post('/create', async (req, res) => {
 // Add member (admin only)
 router.post('/:id/add-member', async (req, res) => {
   try {
-    let board = await boards.getBoardById(req.params.id);
+    let board = await boards.getBoardByIdWithComments(req.params.id);
     if (!boards.isAdmin(board, req.session.user._id)) {
       return res.status(403).send("Only admins can add members");
     }
@@ -72,7 +71,7 @@ router.get('/new', async (req, res) => {
 // View board by ID
 router.get('/:id', async (req, res) => {
   try {
-    let board = await boards.getBoardById(req.params.id);
+    let board = await boards.getBoardByIdWithComments(req.params.id);
     if (!req.session.user || !boards.isMember(board, req.session.user._id)) {
       return res.status(403).send("Access denied");
     }
@@ -154,6 +153,27 @@ router.post('/admin/users/:userId/add-to-board', async (req, res) => {
 
 }
 });
-
+router.post('/:boardId/comments', async (req, res) => {
+  try {
+    let {userId, commentText} = req.body;
+    const boardCollection = await boards();
+    const newComment = {
+      _id: uuid(),
+      userId,
+      commentText,
+      createdAt: new Date()
+    };
+    const updateInfo = await boardCollection.updateOne(
+      { boardId: req.params.boardId },
+      { $push: { comments: newComment } }
+    );
+    if (!updateInfo.modifiedCount) 
+      throw 'Couldnt add comment to board';
+    res.redirect(`/boards/${req.params.boardId}`); 
+  } catch (e) {
+    console.error(e);
+    res.status(400).render('error', {error: e});
+  }
+});
 
 export default router;
