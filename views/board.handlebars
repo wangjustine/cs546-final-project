@@ -1,27 +1,5 @@
 <h2>{{board.title}}</h2>
 <p>{{board.description}}</p>
-{{#if message}}
-<p class="message">{{message}}</p>
-{{/if}}
-<div class="board-comments">
-  <h3>Comments</h3>
-  <ul id="comment-list">
-    {{#if board.comments.length}}
-      {{#each board.comments}}
-        <li><strong>{{this.userId}}:</strong> {{this.commentText}} - {{formatDate this.createdAt}}</li> 
-      {{/each}}
-    {{else}}
-      <li>No comments yet.</li>
-    {{/if}}
-  </ul>
-
-  <form id="add-comment-form" data-board-id="{{board.boardId}}">
-    <textarea name="commentText" placeholder="Add a comment" required></textarea>
-    <input type="hidden" name="userId" value="{{currentUser.id}}"> 
-    <button type="submit">Post Comment</button>
-  </form>
-</div>
-<h3>Tasks</h3>
 <ul id="task-list">
   {{#if tasks.length}}
     {{#each tasks}}
@@ -55,7 +33,6 @@
     </form>
   </li>
   {{/each}}
-    {{/each}}
   {{else}}
     <li id="no-tasks-msg">No tasks yet. Add one!</li>
   {{/if}}
