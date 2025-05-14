@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     let userBoards = await boards.getBoardsByUserId(req.session.user._id);
     res.render('boardlist', {boards: userBoards});
   } catch (e) {
-    res.status(400).json({error: e});
+    res.status(404).render('error', {error: e});
   }
 });
 // Create board (admin only)
@@ -35,7 +35,7 @@ router.post('/create', async (req, res) => {
 
     res.redirect(`/boards/${board.boardId}`);
   } catch (e) {
-    res.status(400).json({error: e});
+    res.status(404).render('error', {error: e});
   }
 });
 
@@ -53,7 +53,7 @@ router.post('/:id/add-member', async (req, res) => {
 
     res.redirect(`/boards/${req.params.id}`);
   } catch (e) {
-    res.status(400).json({error: e});
+    res.status(404).render('error', {error: e});
   }
 });
 
