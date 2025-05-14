@@ -1,5 +1,5 @@
 import { boards } from '../config/mongoCollections.js';
-
+import { v4 as uuid } from 'uuid';
 const createBoard = async (title, description, createdBy) => {
   const boardCollection = await boards();
 
