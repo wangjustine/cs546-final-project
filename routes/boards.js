@@ -77,7 +77,7 @@ router.get('/:id', async (req, res) => {
     }
     let userid = req.session.user._id;
     let boardTasks = await tasks.getTasksByBoardId(board.boardId); // assumed function
-    res.render('board', {board, userid : userid, tasks: boardTasks});
+    res.render('board', {board, user:req.session.user, tasks: boardTasks});
   } catch (e) {
     res.status(404).render('error', {error: e});
   }

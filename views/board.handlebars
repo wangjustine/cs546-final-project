@@ -27,7 +27,7 @@
     </ul>
     {{/if}}
     <form method="POST" action="/comments/{{this._id}}">
-      <input type="hidden" name="userId" value="{{userid}}">
+      <input type="hidden" name="userId" value="{{user._id}}">
       <input type="text" name="commentText" placeholder="Add a comment" required>
       <button type="submit">Comment</button>
     </form>

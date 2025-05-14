@@ -84,7 +84,7 @@ router.post('/update/:id', async (req, res) => {
     await tasks.updateTaskStatus(taskId, status);
     let boardTasks = await tasks.getTasksByBoardId(task.boardId);
 
-    res.render('board', { board, userid: userid, tasks: boardTasks, message: 'Task status updated!' });
+    res.render('board', { board, user: req.session.user, tasks: boardTasks, message: 'Task status updated!' });
   } catch (e) {
     res.status(400).render('error', { error: e });
   }
@@ -100,8 +100,7 @@ router.post('/delete/:id', async (req, res) => {
     await tasks.deleteTask(req.params.id);
     let boardTasks = await tasks.getTasksByBoardId(boardId);
     let userid = req.session.user._id;
-    res.render('board', { board, userid: userid, tasks: boardTasks, message: 'Task deleted!' });
-    let deleted = await tasks.deleteTask(req.params.id);
+    res.render('board', { board, user: req.session.user, tasks: boardTasks, message: 'Task deleted!' });
   } catch (e) {
     res.status(400).render('error', { error: e });
   }

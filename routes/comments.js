@@ -18,7 +18,7 @@ router.post('/:taskId', async (req, res) => {
     const board = await boards.getBoardById(task.boardId);
     const boardTasks = await tasks.getTasksByBoardId(task.boardId);
 
-    res.render('board', {board,tasks: boardTasks,message: 'Comment added!'
+    res.render('board', {board,user: req.session.user,tasks: boardTasks,message: 'Comment added!'
     });
 
   } catch (e) {
