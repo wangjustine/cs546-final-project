@@ -3,7 +3,7 @@ import tasks from '../data/tasks.js';
 import boards from '../data/boards.js';
 import xss from 'xss';
 
-import {validateTaskInput, isValidObjectId} from '../validation.js';
+import {validateTaskInput, isValidUUId} from '../validation.js';
 
 
 let router = Router();
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
       createdBy,
       assignedTo
     } = req.body;
-    
+
     boardId = xss(boardId);
     title = xss(title);
     description = xss(description);
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
     assignedTo = xss(assignedTo);
     
 
-    //validateTaskInput({title, description, priority, deadline, status, createdBy, assignedTo});
+    validateTaskInput({title, description, priority, deadline, status, createdBy, assignedTo});
 
     const newTask = await tasks.createTask(
       boardId,
@@ -54,27 +54,37 @@ router.post('/', async (req, res) => {
     res.status(200).json(newTask);
     //res.redirect(`/boards/${boardId}`);
   } catch (e) {
-    res.status(400).render('error', { error: e });
+    res.status(400).json({error: e?.toString?.() || 'Failed to create task'});
   }
 });
 
 router.get('/:id', async (req, res) => {
   try {
-    let task = await tasks.getTaskById(req.params.id);
+    let taskId = xss(req.params.id);
+    if (!isValidUUId(taskId)) throw 'Invalid task ID';
+
+    let task = await tasks.getTaskById(taskId);
     res.status(200).json(task);
   } catch (e) {
-    res.status(400).render('error', { error: e });
+    res.status(400).json({error: e?.toString?.() || 'Task not found'});
   }
 });
 
 router.post('/update/:id', async (req, res) => {
   try {
-    let task = await tasks.getTaskById(req.params.id);
-    let boardId = task.boardId;
-    let board = await boards.getBoardById(boardId);
-    await tasks.updateTaskStatus(task._id, req.body.status);
-    let boardTasks = await tasks.getTasksByBoardId(boardId);
-    res.render('board', { board, tasks: boardTasks , message: 'Task status updated!'});
+    let taskId = xss(req.params.id);
+    let status = xss(req.body.status);
+
+    if (!isValidUUId(taskId)) throw 'Invalid task ID';
+    if (!status) throw 'Status required';
+
+    let task = await tasks.getTaskById(taskId);
+    let board = await boards.getBoardById(task.boardId);
+
+    await tasks.updateTaskStatus(taskId, status);
+    let boardTasks = await tasks.getTasksByBoardId(task.boardId);
+
+    res.render('board', {board, tasks: boardTasks, message: 'Task status updated!'});
   } catch (e) {
     res.status(400).render('error', {error: e});
   }
@@ -82,7 +92,10 @@ router.post('/update/:id', async (req, res) => {
 
 router.post('/delete/:id', async (req, res) => {
   try {
-    let deleted = await tasks.deleteTask(req.params.id);
+    let taskId = xss(req.params.id);
+    if (!isValidUUId(taskId)) throw 'Invalid task ID';
+
+    let deleted = await tasks.deleteTask(taskId);
     res.status(200).json({success: true, deleted});
   } catch (e) {
     res.status(400).json({error: e?.toString?.() || 'Failed to delete task'});
