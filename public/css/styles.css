@@ -197,3 +197,41 @@ footer {
   bottom: 0;
   width: 100%;
 }
+
+.user-item {
+  margin-bottom: 1rem; 
+  padding: 0.5rem;
+  background-color: #f9f9f9; 
+  border-radius: 6px; 
+}
+
+.user-actions {
+  display: flex; 
+  align-items: center; 
+  margin-top: 0.5rem; 
+}
+
+.role-form, .remove-form, .add-to-board-form {
+  display: flex;
+  align-items: center; 
+  gap: 0.5rem;
+  background: none; 
+  padding: 0; 
+  box-shadow: none;
+}
+
+.user-actions select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.user-actions button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem; 
+}
+
+.user-category {
+  text-transform: capitalize;
+}
