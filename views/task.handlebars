@@ -12,7 +12,15 @@
                 <option>high</option>
             </select>
         </label><br>
-        <label for="task-status">Status: <input type="text" id="task-status" name="status" required></label><br>
+        <label for="task-status">Status:
+            <select id="task-status" name="status" required>
+                <option value="">Select status</option>
+                <option value="open">Open</option>
+                <option value="in progress">In Progress</option>
+                <option value="complete">Complete</option>
+            </select>
+        </label><br>
+
         <label for="task-deadline">Deadline: <input type="date" id="task-deadline" name="deadline" required></label><br>
         <label for="task-createdBy">Created By: <input type="text" id="task-createdBy" name="createdBy" required></label><br>
         <label for="task-assignedTo">Assigned To: <input type="text" id="task-assignedTo" name="assignedTo" required></label><br>
