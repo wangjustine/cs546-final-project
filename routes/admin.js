@@ -13,7 +13,7 @@ router.get('/users', async (req, res) => {
     res.render('adminUsers', { users: allUsers });
   } catch (e) {
     console.error(e);
-    res.status(500).render('error', { error: e });
+    res.status(400).render('error', { error: e?.toString?.() || 'Unknown error' });
   }
 });
 router.post('/users/:userId/role', async (req, res) => {
