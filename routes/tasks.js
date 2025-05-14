@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import tasks from '../data/tasks.js';
 import boards from '../data/boards.js';
+import xss from 'xss';
+
 import {validateTaskInput, isValidObjectId} from '../validation.js';
 
 
@@ -26,6 +28,16 @@ router.post('/', async (req, res) => {
       createdBy,
       assignedTo
     } = req.body;
+    
+    boardId = xss(boardId);
+    title = xss(title);
+    description = xss(description);
+    priority = xss(priority);
+    status = xss(status);
+    deadline = xss(deadline);
+    createdBy = xss(createdBy);
+    assignedTo = xss(assignedTo);
+    
 
     //validateTaskInput({title, description, priority, deadline, status, createdBy, assignedTo});
 
