@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import users from '../data/users.js';
-import {validateUserInput, isNonEmptyString, isValidEmail, isValidObjectId} from '../validation.js';
+import {validateUserInput, isNonEmptyString, isValidEmail, } from '../validation.js';
 import bcrypt from 'bcrypt';
 import xss from 'xss';
 
@@ -17,7 +17,6 @@ router.get("/", async (req, res) => {
 // GET: user by ID
 router.get('/user/:id', async (req, res) => {
   try {
-    if (!isValidObjectId(req.params.id)) throw 'Invalid user ID';
     if (!req.session.user || req.session.user._id !== req.params.id) {
       return res.status(403).redirect('/login');
     }
