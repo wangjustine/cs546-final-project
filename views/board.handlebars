@@ -10,7 +10,12 @@
       <li data-task-id="{{this._id}}">
         <form method="POST" action="/tasks/update/{{this._id}}">
           <input type="text" name="title" value="{{this.title}}" required>
-          <input type="text" name="status" value="{{this.status}}" required>
+          <select name="status" required>
+            <option value="open" {{#if (eq this.status "open")}}selected{{/if}}>open</option>
+            <option value="in progress" {{#if (eq this.status "in progress")}}selected{{/if}}>in progress</option>
+            <option value="complete" {{#if (eq this.status "complete")}}selected{{/if}}>complete</option>
+          </select>
+
           <button type="submit">Update</button>
         </form>
         <form method="POST" action="/tasks/delete/{{this._id}}">

@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 
     //validateTaskInput({title, description, priority, deadline, status, createdBy, assignedTo});
 
-    await tasks.createTask(
+    const newTask = await tasks.createTask(
       boardId,
       title,
       description,
@@ -39,8 +39,8 @@ router.post('/', async (req, res) => {
       createdBy,
       assignedTo
     );
-
-    res.redirect(`/boards/${boardId}`);
+    res.status(200).json(newTask);
+    //res.redirect(`/boards/${boardId}`);
   } catch (e) {
     res.status(400).render('error', { error: e });
   }
@@ -64,22 +64,16 @@ router.post('/update/:id', async (req, res) => {
     let boardTasks = await tasks.getTasksByBoardId(boardId);
     res.render('board', { board, tasks: boardTasks , message: 'Task status updated!'});
   } catch (e) {
-    res.status(400).render('error', { error: e });
+    res.status(400).render('error', {error: e});
   }
 });
 
 router.post('/delete/:id', async (req, res) => {
   try {
-    let task = await tasks.getTaskById(req.params.id);
-    let boardId = task.boardId;
-    let board = await boards.getBoardById(boardId);
-    await tasks.deleteTask(req.params.id);
-    let boardTasks = await tasks.getTasksByBoardId(boardId);
-    res.render('board', { board, tasks: boardTasks , message: 'Task deleted!' });
     let deleted = await tasks.deleteTask(req.params.id);
-    res.status(200).json(deleted);
+    res.status(200).json({success: true, deleted});
   } catch (e) {
-    res.status(400).render('error', { error: e });
+    res.status(400).json({error: e?.toString?.() || 'Failed to delete task'});
   }
 });
 
