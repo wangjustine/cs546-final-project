@@ -70,16 +70,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let boardId = document.getElementById('boardId').value;
 
         let validPriorities = ['low', 'medium', 'high'];
+        let validStatuses = ['open', 'in progress', 'complete'];
         let isValidDate = !isNaN(Date.parse(deadline));
         let error = null;
-
-        if (!title || !description || !priority || !deadline || !status || !createdBy || !assignedTo) {
+        if (!title || !description || !priority || !status || !deadline || !createdBy || !assignedTo || !boardId) {
           error = 'All fields are required.';
         } else if (!validPriorities.includes(priority)) {
           error = 'Priority must be low, medium, or high.';
+        } else if (!validStatuses.includes(status)) {
+          error = 'Status must be open, in progress, or complete.';
         } else if (!isValidDate) {
           error = 'Deadline must be a valid date.';
         }
+        
 
         if (error) {
           alert(error);
@@ -90,13 +93,22 @@ document.addEventListener('DOMContentLoaded', () => {
           let res = await fetch('/tasks', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              boardId, title, description, priority, status, deadline, createdBy, assignedTo
-            })
+            body: JSON.stringify({boardId, title, description, priority, status, deadline, createdBy, assignedTo})
           });
 
           if (res.ok) {
+            const task = await res.json(); 
             alert('Task created successfully!');
+            // If you're already on the board page and there's a task list element, append it
+            const taskList = document.getElementById('task-list');
+            if (taskList) {
+              const li = document.createElement('li');
+              li.textContent = `${task.title} - ${task.status} - Due: ${task.deadline}`;
+              taskList.appendChild(li);
+            } else {
+              // Otherwise redirect back to board
+              window.location.href = `/boards/${boardId}`;
+            }
             taskForm.reset();
           } else {
             const err = await res.json();
