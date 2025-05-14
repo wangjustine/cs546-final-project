@@ -2,6 +2,7 @@ import { Router } from 'express';
 import users from '../data/users.js';
 import {validateUserInput, isNonEmptyString, isValidEmail, isValidObjectId} from '../validation.js';
 import bcrypt from 'bcrypt';
+import xss from 'xss';
 
 let router = Router();
 
@@ -43,11 +44,13 @@ router.get('/user/:id', async (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     let {firstName, lastName, email, password, category, preference} = req.body;
-    
-    email = email?.toLowerCase().trim();
-    firstName = firstName?.trim();
-    lastName = lastName?.trim();
-    password = password?.trim();
+
+    firstName = xss(firstName?.trim());
+    lastName = xss(lastName?.trim());
+    email = xss(email?.toLowerCase().trim());
+    password = xss(password?.trim());
+    category = xss(category);
+    preference = xss(preference);
 
     validateUserInput({ firstName, lastName, email, password })
     
@@ -71,8 +74,8 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     let {email, password} = req.body;
-    email = email?.toLowerCase().trim();
-    password = password?.trim();
+    email = xss(email?.toLowerCase().trim());
+    password = xss(password?.trim());
 
     if (!isValidEmail(email)) throw 'Invalid email format!';
     if (!isNonEmptyString(password)) throw 'Password is required!';
