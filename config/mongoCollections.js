@@ -19,10 +19,4 @@ export const comments = getCollectionFn('comments');
 
 export const boards = getCollectionFn('boards');
 
-export const notifications = getCollectionFn('notifications');
-
 export const tasks = getCollectionFn('tasks');
-
-export const activityLogs = getCollectionFn('activityLogs');
-
-
