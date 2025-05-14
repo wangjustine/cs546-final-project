@@ -1,42 +1,56 @@
 <h2>{{board.title}}</h2>
 <p>{{board.description}}</p>
 {{#if message}}
-  <p class="message">{{message}}</p>
+<p class="message">{{message}}</p>
 {{/if}}
 <h3>Tasks</h3>
 <ul>
   {{#each tasks}}
-    <li>
-      <form method="POST" action="/tasks/update/{{this._id}}">
-        <input type="text" name="title" value="{{this.title}}" required>
-        <input type="text" name="status" value="{{this.status}}" required>
-        <button type="submit">Update</button>
-      </form>
+  <li>
+    <form method="POST" action="/tasks/update/{{this._id}}">
+      <input type="text" name="title" value="{{this.title}}" required>
+      <input type="text" name="status" value="{{this.status}}" required>
+      <button type="submit">Update</button>
+    </form>
 
-      <form method="POST" action="/tasks/delete/{{this._id}}">
-        <button type="submit">Delete</button>
-      </form>
-    </li>
+    <form method="POST" action="/tasks/delete/{{this._id}}">
+      <button type="submit">Delete</button>
+    </form>
+    {{#if this.comments.length}}
+    <h5>Comments:</h5>
+    <ul>
+      {{#each this.comments}}
+      <li><strong>{{this.userId}}</strong>: {{this.commentText}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+    <form method="POST" action="/comments/{{this._id}}">
+      <input type="hidden" name="userId" value="{{userid}}">
+      <input type="text" name="commentText" placeholder="Add a comment" required>
+      <button type="submit">Comment</button>
+    </form>
+  </li>
   {{/each}}
 </ul>
 <p><a href="/tasks/new?boardId={{board.boardId}}">Create New Task</a></p>
 
-  <section class="add-member">
-    <h3>Add Member</h3>
-    <form method="POST" action="/boards/{{board.boardId}}/add-member" id="add-member-form">
-      <label for="userId">User ID</label>
-      <input type="text" id="userId" name="userId" required>
-      <button type="submit">Add Member</button>
-    </form>
-  </section>
+<section class="add-member">
+  <h3>Add Member</h3>
+  <form method="POST" action="/boards/{{board.boardId}}/add-member" id="add-member-form">
+    <label for="userId">User ID</label>
+    <input type="text" id="userId" name="userId" required>
+    <button type="submit">Add Member</button>
+  </form>
+</section>
 
-  <h3>Members</h3>
-  <ul>
-    {{#each board.members}}
-      <li>User: {{this.userId}} ({{this.role}})</li>
-    {{/each}}
-  </ul>
+<h3>Members</h3>
+<ul>
+  {{#each board.members}}
+  <li>User: {{this.userId}} ({{this.role}})</li>
+  {{/each}}
+</ul>
 
-  <script src="/js/board.js"></script>
+<script src="/js/board.js"></script>
 </body>
+
 </html>

@@ -76,9 +76,9 @@ router.get('/:id', async (req, res) => {
     if (!req.session.user || !boards.isMember(board, req.session.user._id)) {
       return res.status(403).send("Access denied");
     }
-
+    let userid = req.session.user._id;
     let boardTasks = await tasks.getTasksByBoardId(board.boardId); // assumed function
-    res.render('board', {board, tasks: boardTasks});
+    res.render('board', {board, userid : userid, tasks: boardTasks});
   } catch (e) {
     res.status(404).render('error', {error: e});
   }

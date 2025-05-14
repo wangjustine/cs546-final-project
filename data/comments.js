@@ -19,4 +19,13 @@ const addComment = async (taskId, userId, commentText) => {
   if (!updateInfo.modifiedCount) throw 'Could not add comment';
 };
 
-export default { addComment };
+const deletecomment = async (taskId, commentId) => {
+  const taskCollection = await tasks();
+  const updateInfo = await taskCollection.updateOne(
+    { _id: taskId },
+    { $pull: { comments: { _id: commentId } } }
+  );
+  if (!updateInfo.modifiedCount) throw 'Could not delete comment';
+};
+
+export default { addComment , deletecomment};
